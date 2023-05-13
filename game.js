@@ -3,24 +3,47 @@ class Demo1 extends AdventureScene {
         super("demo1", "First Room");
     }
 
+    preload(){
+        this.load.image("kitchen", "FirstScene.png");
+        this.load.image("lobster", "Lobster.png");
+    }
     onEnter() {
+        let kitchen = this.add.sprite(720,540, "kitchen");
+        kitchen.scale = 6;
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
-            .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
+        let lobster1 = this.add.sprite(850, 890, "lobster");
+        lobster1.scale = 6;
+        lobster1.setInteractive().on('pointerover', () => this.showMessage("You."))
+        .on('pointerdown', () => {
+            this.showMessage("Lobster Time!");
+            this.tweens.add({
+                targets: lobster1,
+                x: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
             });
+        });
 
+        let rectangle = this.add.rectangle(675, 650, 200, 600);
+        rectangle.setInteractive().on('pointerover', () => this.showMessage("A plant... for escaping?"))
+        .on('pointerdown', () => {
+            this.tweens.add({
+                targets: lobster1,
+                x: rectangle.x,
+                delay: 100,
+                y: rectangle.y - 500,
+                repeat: 0,
+                yoyo: false,
+                duration: 1000
+            });
+            this.gotoScene(Demo2);
+        })
+
+        //let lobster2 = this.add.sprite(1050, 880, "lobster");
+        //lobster2.scale = 6;
+/*
         let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
             .setFontSize(this.s * 2)
             .setInteractive()
@@ -57,6 +80,7 @@ class Demo1 extends AdventureScene {
                     this.gotoScene('demo2');
                 }
             })
+*/
 
     }
 }
@@ -97,8 +121,8 @@ class Intro extends Phaser.Scene {
         super('intro')
     }
     create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
+        this.add.text(0,0, "Adventure awaits!");
+        this.add.text(0,25, "Click anywhere to begin.");
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
             this.time.delayedCall(1000, () => this.scene.start('demo1'));
