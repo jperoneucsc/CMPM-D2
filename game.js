@@ -125,6 +125,7 @@ class Scene2 extends AdventureScene {
     preload(){
         this.load.image("kitchen2", "FirstSceneWithChef.png");
         this.load.image("lobster", "Lobster.png");
+        this.load.image("spoon", "woodenspoon.png");
     }
     onEnter() {
         let kitchen2 = this.add.sprite(720,540, "kitchen2");
@@ -168,6 +169,24 @@ class Scene2 extends AdventureScene {
                 });
             })
             .on('pointerdown', () => this.gotoScene('outro'));
+
+
+        let spoon = this.add.sprite(1390, 600, "spoon");
+        spoon.scale = 4;
+        spoon.angle = 45;
+
+        spoon.setInteractive().on('pointerover', () => this.showMessage("A spoon."))
+        .on('pointerdown', () => {
+            this.showMessage("You pick up the spoon.");
+                this.gainItem('spoon');
+                this.tweens.add({
+                    targets: spoon,
+                    y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => spoon.destroy()
+                });
+            })
     }
 }
 
